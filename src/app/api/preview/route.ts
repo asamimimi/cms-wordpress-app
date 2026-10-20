@@ -39,7 +39,8 @@ export async function GET(request: Request) {
 
   const authToken = login.authToken;
 
-  draftMode().enable();
+  const draft = await draftMode();
+  draft.disable();
 
   const query = gql`
     query GetContentNode($id: ID!) {
@@ -64,10 +65,9 @@ export async function GET(request: Request) {
   }
 
   const response = NextResponse.redirect(
-    `${process.env.NEXT_PUBLIC_BASE_URL}${
-      contentNode.status === "draft"
-        ? `/preview/${contentNode.databaseId}`
-        : contentNode.uri
+    `${process.env.NEXT_PUBLIC_BASE_URL}${contentNode.status === "draft"
+      ? `/preview/${contentNode.databaseId}`
+      : contentNode.uri
     }`,
   );
 

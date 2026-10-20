@@ -30,6 +30,7 @@ export default async function NotFound() {
   const { page } = await fetchGraphQL<{ page: Page }>(print(PageQuery), {
     id: notFoundPageWordPressId,
   });
-
-  return <div dangerouslySetInnerHTML={{ __html: page.content || " " }} />;
+  if (!page?.content) {
+    return <div dangerouslySetInnerHTML={{ __html: page.content || " " }} />;
+  }
 }
